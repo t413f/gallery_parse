@@ -35,9 +35,7 @@ for urlsite in all_urls:
     soup = BeautifulSoup(html, 'lxml')
     href_img.append(soup.find(attrs={'id': 'xpic'}).attrs['src'])
     name_img.append(soup.find(attrs={'id': 'axpic'}).attrs['title'][:soup.find(attrs={'id': 'axpic'}).attrs['title'].find(".")])
-    if len(href_img) == 10:
-        print(href_img)
-        break
+
 
 #download all pic
 for id, urls in enumerate(href_img):
