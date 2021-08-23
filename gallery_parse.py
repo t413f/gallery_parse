@@ -30,7 +30,7 @@ href_img = []
 name_img = []
 
 for urlsite in all_urls:
-    response = requests.get("https://gallerix.ru" + urlsite, headers={'User-Agent': ua.chrome})
+    response = requests.get(str(os.environ["MAINSITE"]) + urlsite, headers={'User-Agent': ua.chrome})
     html = response.content
     soup = BeautifulSoup(html, 'lxml')
     href_img.append(soup.find(attrs={'id': 'xpic'}).attrs['src'])
