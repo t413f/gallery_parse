@@ -1,15 +1,16 @@
 from bs4 import BeautifulSoup
 import requests
+import os
 from fake_useragent import UserAgent
 
-#url site: Gallerix.ru
-url = "https://gallerix.ru/album/200-Russian/"
+#url site
+urlsite = str(os.environ["URLSITES"])
 
 #server bypass
 ua = UserAgent()
 
 #copy webpage
-response = requests.get(url, headers={'User-Agent': ua.chrome})
+response = requests.get(urlsite, headers={'User-Agent': ua.chrome})
 html = response.content
 soup = BeautifulSoup(html, "lxml")
 
@@ -28,12 +29,20 @@ for obj in soup.findAll(attrs={'class': 'pic'}):
 href_img = []
 name_img = []
 
-for url in all_urls:
-    response = requests.get("https://gallerix.ru" + url, headers={'User-Agent': ua.chrome})
+for urlsite in all_urls:
+    response = requests.get("https://gallerix.ru" + urlsite, headers={'User-Agent': ua.chrome})
     html = response.content
     soup = BeautifulSoup(html, 'lxml')
     href_img.append(soup.find(attrs={'id': 'xpic'}).attrs['src'])
     name_img.append(soup.find(attrs={'id': 'axpic'}).attrs['title'][:soup.find(attrs={'id': 'axpic'}).attrs['title'].find(".")])
+    if len(href_img) == 10:
+        print(href_img)
+        break
 
-
+#download all pic
+for id, urls in enumerate(href_img):
+    resource = requests.get(urls, headers={'User-Agent': ua.chrome})
+    out = open("D:/gallery/images/" + str(name_img[id]) + ".jpg", "wb")
+    out.write(resource.content)
+    out.close()
 
